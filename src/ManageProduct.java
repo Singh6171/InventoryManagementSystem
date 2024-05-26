@@ -34,26 +34,25 @@ public class ManageProduct extends javax.swing.JFrame {
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery("select * from category");
             comboBoxCategory.removeAllItems();
-            while(rs.next()){
-                comboBoxCategory.addItem(rs.getString("category_pk")+"-"+rs.getString("name"));
+            while (rs.next()) {
+                comboBoxCategory.addItem(rs.getString("category_pk") + "-" + rs.getString("name"));
             }
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
         }
     }
-    
-    private boolean validateFields(String formType){
-        if (formType.equals("edit")&& !txtName.getText().equals("") && !txtPrice.getText().equals("") && !txtDescription.getText().equals("")){
+
+    private boolean validateFields(String formType) {
+        if (formType.equals("edit") && !txtName.getText().equals("") && !txtPrice.getText().equals("") && !txtDescription.getText().equals("")) {
             return false;
-        }
-        else if (formType.equals("new")&& !txtName.getText().equals("") && !txtPrice.getText().equals("") && !txtDescription.getText().equals("") && !txtQuantity.getText().equals("")){
+        } else if (formType.equals("new") && !txtName.getText().equals("") && !txtPrice.getText().equals("") && !txtDescription.getText().equals("") && !txtQuantity.getText().equals("")) {
             return false;
-        }
-        else{
+        } else {
             return true;
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -100,9 +99,14 @@ public class ManageProduct extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Name", "Quantity", "Description", "Category ID", "Category Name"
+                "ID", "Name", "Quantity", "Price", "Description", "Category ID", "Category Name"
             }
         ));
+        tableProduct.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableProductMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tableProduct);
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 58, -1, 476));
@@ -141,6 +145,11 @@ public class ManageProduct extends javax.swing.JFrame {
         getContentPane().add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(484, 421, -1, -1));
 
         btnUpdate.setText("Update");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(574, 421, -1, -1));
 
         btnReset.setText("Reset");
@@ -170,7 +179,19 @@ public class ManageProduct extends javax.swing.JFrame {
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         getAllCategory();
-        
+        DefaultTableModel model = (DefaultTableModel) tableProduct.getModel();
+        try {
+            Connection con = ConnectionProvider.getCon();
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("Select * from product inner join category on product.category_fk = category.category_pk");
+            while (rs.next()) {
+                model.addRow(new Object[]{rs.getString("product_pk"), rs.getString("name"), rs.getString("quantity"), rs.getString("price"), rs.getString("description"), rs.getString("category_fk"), rs.getString(8)});
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+        btnUpdate.setEnabled(false);
     }//GEN-LAST:event_formComponentShown
 
     private void txtQuantityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtQuantityActionPerformed
@@ -179,6 +200,39 @@ public class ManageProduct extends javax.swing.JFrame {
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
+        String name = txtName.getText();
+        String quantity = txtQuantity.getText();
+        String price = txtPrice.getText();
+        String description = txtDescription.getText();
+        String category = (String) comboBoxCategory.getSelectedItem();
+        String categoryId[] = category.split("-", 0);
+        if (validateFields("new")) {
+            JOptionPane.showMessageDialog(null, "All Fields Are Required");
+        } else {
+            try {
+                Connection con = ConnectionProvider.getCon();
+                PreparedStatement ps = con.prepareStatement("insert into product(name, quantity, price, description, category_fk) values(?,?,?,?,?)");
+                ps.setString(1, name);
+                ps.setString(2, quantity);
+                ps.setString(3, price);
+                ps.setString(4, description);
+                ps.setString(5, categoryId[0]);
+
+                int rowsAffected = ps.executeUpdate();
+                if (rowsAffected > 0) {
+                    JOptionPane.showMessageDialog(null, "Product added successfully");
+                    setVisible(false); // Hide current window
+                    new ManageProduct().setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Failed to add product");
+                }
+                ps.close();
+                con.close();
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
@@ -190,6 +244,83 @@ public class ManageProduct extends javax.swing.JFrame {
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
         setVisible(false);
     }//GEN-LAST:event_btnCloseActionPerformed
+
+    private void tableProductMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableProductMouseClicked
+        int index = tableProduct.getSelectedRow();
+        TableModel model = tableProduct.getModel();
+        String id = model.getValueAt(index, 0).toString();
+        productPk = Integer.parseInt(id);
+        String name = model.getValueAt(index, 1).toString();
+        txtName.setText(name);
+        String quantity = model.getValueAt(index, 2).toString();
+        totalQuantity = 0;
+        lblQuantity.setText("Add Quantity");
+        totalQuantity = Integer.parseInt(quantity);
+        String price = model.getValueAt(index, 3).toString();
+        txtPrice.setText(price);
+        String description = model.getValueAt(index, 4).toString();
+        txtDescription.setText(description);
+        comboBoxCategory.removeAllItems();
+        String categoryId = model.getValueAt(index, 5).toString();
+        String categoryName = model.getValueAt(index, 6).toString();
+        comboBoxCategory.addItem(categoryId + "-" + categoryName);
+
+        try {
+            Connection con = ConnectionProvider.getCon();
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("select * from category");
+            while (rs.next()) {
+                if (Integer.parseInt(categoryId) != rs.getInt(1)) {
+                    comboBoxCategory.addItem(rs.getString("category_pk") + "-" + rs.getString("name"));
+                }
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+
+        btnSave.setEnabled(false);
+        btnUpdate.setEnabled(true);
+    }//GEN-LAST:event_tableProductMouseClicked
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        String name = txtName.getText();
+        String quantity = txtQuantity.getText();
+        String price = txtPrice.getText();
+        String description = txtDescription.getText();
+        String category = (String) comboBoxCategory.getSelectedItem();
+        String categoryId[] = category.split("-", 0);
+        if (validateFields("edit")) {
+            JOptionPane.showMessageDialog(null, "All Fields Are Required");
+        } else {
+            try {
+                if(!quantity.equals("")){
+                    totalQuantity = totalQuantity + Integer.parseInt(quantity);
+                }
+                Connection con = ConnectionProvider.getCon();
+                PreparedStatement ps = con.prepareStatement("update product set name=?, quantity=?, price=?, description=?, category_fk=? where product_pk=?");
+                ps.setString(1, name);
+                ps.setInt(2, totalQuantity);
+                ps.setString(3, price);
+                ps.setString(4, description);
+                ps.setString(5, categoryId[0]);
+                ps.setInt(6, productPk);
+
+                int rowsAffected = ps.executeUpdate();
+                if (rowsAffected > 0) {
+                    JOptionPane.showMessageDialog(null, "Product Updated successfully");
+                    setVisible(false); // Hide current window
+                    new ManageProduct().setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Failed to update product");
+                }
+                ps.close();
+                con.close();
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }    }//GEN-LAST:event_btnUpdateActionPerformed
 
     /**
      * @param args the command line arguments

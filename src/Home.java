@@ -1,4 +1,6 @@
+
 import javax.swing.*;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -15,12 +17,21 @@ public class Home extends javax.swing.JFrame {
      */
     public Home() {
         initComponents();
+        setLocationRelativeTo(null); // Center the frame on the screen
     }
+
+    /**
+     * Creates a new instance of Home with role-based customization.
+     *
+     * @param role The role of the user ("admin" or other roles).
+     */
     public Home(String role) {
         initComponents();
-        setLocationRelativeTo(null);
-        if(role.equals("admin")){
-            btnUser.setVisible(false);
+        setLocationRelativeTo(null); // Center the frame on the screen
+
+        // Customize UI based on user role
+        if (role != null && role.equals("admin")) {
+            btnUser.setVisible(false); // Hide the btnUser button for admin
         }
     }
 
@@ -34,16 +45,17 @@ public class Home extends javax.swing.JFrame {
     private void initComponents() {
 
         btnUser = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        btnCategory = new javax.swing.JButton();
+        btnProduct = new javax.swing.JButton();
+        btnCustomer = new javax.swing.JButton();
+        btnOrder = new javax.swing.JButton();
+        btnViewOrder = new javax.swing.JButton();
+        btnLogout = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnUser.setBackground(new java.awt.Color(204, 204, 204));
@@ -57,51 +69,76 @@ public class Home extends javax.swing.JFrame {
         });
         getContentPane().add(btnUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 10, -1, -1));
 
-        jButton2.setBackground(new java.awt.Color(204, 204, 204));
-        jButton2.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/category.png"))); // NOI18N
-        jButton2.setText("Category");
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 10, -1, -1));
-
-        jButton3.setBackground(new java.awt.Color(204, 204, 204));
-        jButton3.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/product.png"))); // NOI18N
-        jButton3.setText("Product");
-        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 10, -1, -1));
-
-        jButton4.setBackground(new java.awt.Color(204, 204, 204));
-        jButton4.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/customers.png"))); // NOI18N
-        jButton4.setText("Customer");
-        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 10, -1, -1));
-
-        jButton5.setBackground(new java.awt.Color(204, 204, 204));
-        jButton5.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Orders.png"))); // NOI18N
-        jButton5.setText("Order");
-        getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 10, -1, -1));
-
-        jButton6.setBackground(new java.awt.Color(204, 204, 204));
-        jButton6.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
-        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/View-orders.png"))); // NOI18N
-        jButton6.setText("View Orders");
-        getContentPane().add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 10, -1, -1));
-
-        jButton7.setBackground(new java.awt.Color(204, 204, 204));
-        jButton7.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
-        jButton7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Exit.png"))); // NOI18N
-        jButton7.setText("Logout");
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
+        btnCategory.setBackground(new java.awt.Color(204, 204, 204));
+        btnCategory.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
+        btnCategory.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/category.png"))); // NOI18N
+        btnCategory.setText("Category");
+        btnCategory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
+                btnCategoryActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(1050, 10, -1, -1));
+        getContentPane().add(btnCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 10, -1, -1));
+
+        btnProduct.setBackground(new java.awt.Color(204, 204, 204));
+        btnProduct.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
+        btnProduct.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/product.png"))); // NOI18N
+        btnProduct.setText("Product");
+        btnProduct.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProductActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnProduct, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 10, -1, -1));
+
+        btnCustomer.setBackground(new java.awt.Color(204, 204, 204));
+        btnCustomer.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
+        btnCustomer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/customers.png"))); // NOI18N
+        btnCustomer.setText("Customer");
+        btnCustomer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCustomerActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnCustomer, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 10, -1, -1));
+
+        btnOrder.setBackground(new java.awt.Color(204, 204, 204));
+        btnOrder.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
+        btnOrder.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Orders.png"))); // NOI18N
+        btnOrder.setText("Order");
+        btnOrder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOrderActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnOrder, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 10, -1, -1));
+
+        btnViewOrder.setBackground(new java.awt.Color(204, 204, 204));
+        btnViewOrder.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
+        btnViewOrder.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/View-orders.png"))); // NOI18N
+        btnViewOrder.setText("View Orders");
+        btnViewOrder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewOrderActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnViewOrder, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 10, -1, -1));
+
+        btnLogout.setBackground(new java.awt.Color(204, 204, 204));
+        btnLogout.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
+        btnLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Exit.png"))); // NOI18N
+        btnLogout.setText("Logout");
+        btnLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogoutActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnLogout, new org.netbeans.lib.awtextra.AbsoluteConstraints(1050, 10, -1, -1));
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-540, -290, -1, 770));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/home_background.png"))); // NOI18N
         jLabel2.setText(" ");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1370, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -111,14 +148,37 @@ public class Home extends javax.swing.JFrame {
         new ManageUser().setVisible(true);
     }//GEN-LAST:event_btnUserActionPerformed
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         // Logout button handling code here:
-        int a = JOptionPane.showConfirmDialog(null, "Do you want to logout?","Select", JOptionPane.YES_NO_OPTION);
-        if (a == 0){
-            setVisible(false); 
+        int a = JOptionPane.showConfirmDialog(null, "Do you want to logout?", "Select", JOptionPane.YES_NO_OPTION);
+        if (a == 0) {
+            setVisible(false);            
             new Login().setVisible(true);
         }
-    }//GEN-LAST:event_jButton7ActionPerformed
+    }//GEN-LAST:event_btnLogoutActionPerformed
+
+    private void btnCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCategoryActionPerformed
+        // TODO add your handling code here:
+        new ManageCategory().setVisible(true);
+    }//GEN-LAST:event_btnCategoryActionPerformed
+
+    private void btnProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductActionPerformed
+        new ManageProduct().setVisible(true);
+    }//GEN-LAST:event_btnProductActionPerformed
+
+    private void btnCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCustomerActionPerformed
+        new ManageCustomer().setVisible(true);
+    }//GEN-LAST:event_btnCustomerActionPerformed
+
+    private void btnOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOrderActionPerformed
+        new ManageOrder().setVisible(true);
+        
+    }//GEN-LAST:event_btnOrderActionPerformed
+
+    private void btnViewOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewOrderActionPerformed
+        new ViewOrder().setVisible(true);
+
+    }//GEN-LAST:event_btnViewOrderActionPerformed
 
     /**
      * @param args the command line arguments
@@ -156,13 +216,13 @@ public class Home extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCategory;
+    private javax.swing.JButton btnCustomer;
+    private javax.swing.JButton btnLogout;
+    private javax.swing.JButton btnOrder;
+    private javax.swing.JButton btnProduct;
     private javax.swing.JButton btnUser;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
+    private javax.swing.JButton btnViewOrder;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables

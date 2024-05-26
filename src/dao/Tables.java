@@ -34,13 +34,18 @@ public class Tables {
 //            st.executeUpdate("CREATE TABLE category ("
 //                    + "category_pk INT AUTO_INCREMENT PRIMARY KEY, "
 //                    + "name varchar(200))" ); 
-            st.executeUpdate("CREATE TABLE product ("
-                    + "product_pk INT AUTO_INCREMENT PRIMARY KEY, "
-                    + "name VARCHAR(200), " 
-                    + "quantity INT, " 
-                    + "price INT, " 
-                    + "description VARCHAR(500), " 
-                    + "category_fk INT)");    
+//            st.executeUpdate("CREATE TABLE customer ("
+//                    + "customer_pk INT AUTO_INCREMENT PRIMARY KEY, "
+//                    + "name VARCHAR(200), " 
+//                    +"mobileNumber INT(10),"
+//                    + "email VARCHAR(200))");  
+
+            st.executeUpdate("CREATE TABLE orderDetails ("
+                    + "order_pk INT AUTO_INCREMENT PRIMARY KEY, "
+                    + "orderId VARCHAR(200), "
+                    + "customer_fk INT,"
+                    + "orderDate VARCHAR(200),"
+                    + "totalPaid INT)");
 
             JOptionPane.showMessageDialog(null, "Table has been created Successfully");
 

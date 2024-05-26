@@ -8,14 +8,13 @@ import java.sql.*;
 import dao.ConnectionProvider;
 import java.awt.Color;
 import javax.swing.table.*;
-import javax.swing.ComboBoxEditor;
 
 /**
  *
  * @author gurdeepsingh
  */
 public class ManageUser extends javax.swing.JFrame {
-
+    
     int appUserPk = 0;
 
     /**
@@ -25,7 +24,7 @@ public class ManageUser extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
     }
-
+    
     private boolean validateFields(String formType) {
         if (formType.equals("edit") && !txtName.getText().equals("") && !txtName.getText().equals("") && !txtEmail.getText().equals("") && !txtMobileNo.getText().equals("") && !txtAddress.getText().equals("")) {
             return false;
@@ -211,6 +210,7 @@ public class ManageUser extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
         }
+        updateButton.setEnabled(false);
     }//GEN-LAST:event_formComponentShown
 
 // txtName handling code here:
@@ -236,7 +236,7 @@ public class ManageUser extends javax.swing.JFrame {
         String address = txtAddress.getText();
         String password = txtPassword.getText();
         String status = (String) statusOption.getSelectedItem();
-
+        
         if (validateFields("new")) {
             JOptionPane.showMessageDialog(null, "All fields are required! ");
         } else {
@@ -251,7 +251,7 @@ public class ManageUser extends javax.swing.JFrame {
                 ps.setString(5, password);
                 ps.setString(6, address);
                 ps.setString(7, status);
-
+                
                 int rowsAffected = ps.executeUpdate();
                 if (rowsAffected > 0) {
                     JOptionPane.showMessageDialog(null, "User added successfully");
@@ -262,29 +262,29 @@ public class ManageUser extends javax.swing.JFrame {
                 }
                 ps.close();
                 con.close();
-
+                
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(null, "Database error: " + e.getMessage());
                 e.printStackTrace();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
                 e.printStackTrace();
-
+                
             }
-
+            
         }
-
+        
 
     }//GEN-LAST:event_saveButtonActionPerformed
 
 // updateButton handling code here:
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
-String name = txtName.getText();
+        String name = txtName.getText();
         String mobileNo = txtMobileNo.getText();
         String email = txtEmail.getText();
         String address = txtAddress.getText();
         String status = (String) statusOption.getSelectedItem();
-
+        
         if (validateFields("edit")) {
             JOptionPane.showMessageDialog(null, "All fields are required! ");
         } else {
@@ -298,7 +298,7 @@ String name = txtName.getText();
                 ps.setString(4, address);
                 ps.setString(5, status);
                 ps.setInt(6, appUserPk);
-
+                
                 int rowsAffected = ps.executeUpdate();
                 if (rowsAffected > 0) {
                     JOptionPane.showMessageDialog(null, "User information updated successfully");
@@ -309,25 +309,25 @@ String name = txtName.getText();
                 }
                 ps.close();
                 con.close();
-
+                
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(null, "Database error: " + e.getMessage());
                 e.printStackTrace();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
                 e.printStackTrace();
-
+                
             }
-
+            
         }
-
+        
 
     }//GEN-LAST:event_updateButtonActionPerformed
 
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
         // TODO add your handling code here:
         
-            setVisible(false);
+        setVisible(false);
         
     }//GEN-LAST:event_closeButtonActionPerformed
 
@@ -335,12 +335,12 @@ String name = txtName.getText();
     private void userTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userTableMouseClicked
         int index = userTable.getSelectedRow();
         TableModel model = userTable.getModel();
-
+        
         if (index != -1) { // Check if a valid row is selected
             // Get data from the selected row
             String id = model.getValueAt(index, 0).toString();
             appUserPk = Integer.parseInt(id);
-
+            
             String name = model.getValueAt(index, 1).toString();
             String mobileNo = model.getValueAt(index, 2).toString();
             String email = model.getValueAt(index, 3).toString();
@@ -352,7 +352,7 @@ String name = txtName.getText();
             txtMobileNo.setText(mobileNo);
             txtEmail.setText(email);
             txtAddress.setText(address);
-
+            
             statusOption.removeAllItems();
             if (status.equals("Active")) {
                 statusOption.addItem("Active");
@@ -360,7 +360,7 @@ String name = txtName.getText();
             } else {
                 statusOption.addItem("Inactive");
                 statusOption.addItem("Active");
-
+                
             }
             
             txtPassword.setEditable(false);
